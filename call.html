@@ -1,11 +1,34 @@
-<button onclick="call()">Call AI</button>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Call Test</title>
+</head>
+<body>
+  <h2>AI Call Test</h2>
 
-<script src="https://sdk.twilio.com/js/client/v1.14/twilio.min.js"></script>
-<script>
-async function call() {
-  const res = await fetch("/token");
-  const { token } = await res.json();
-  const device = new Twilio.Device(token);
-  device.connect();
-}
-</script>
+  <input id="phone" placeholder="+91XXXXXXXXXX" />
+  <button onclick="startCall()">Call AI</button>
+
+  <p id="status"></p>
+
+  <script>
+    async function startCall() {
+      const phone = document.getElementById("phone").value;
+      if (!phone) {
+        alert("Enter phone number");
+        return;
+      }
+
+      document.getElementById("status").innerText = "Calling...";
+
+      const res = await fetch(`/call?to=${encodeURIComponent(phone)}`, {
+        method: "POST"
+      });
+
+      const data = await res.json();
+      document.getElementById("status").innerText =
+        "Call initiated. Call SID: " + data.call_sid;
+    }
+  </script>
+</body>
+</html>
