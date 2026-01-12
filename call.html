@@ -1,0 +1,11 @@
+<button onclick="call()">Call AI</button>
+
+<script src="https://sdk.twilio.com/js/client/v1.14/twilio.min.js"></script>
+<script>
+async function call() {
+  const res = await fetch("/token");
+  const { token } = await res.json();
+  const device = new Twilio.Device(token);
+  device.connect();
+}
+</script>
